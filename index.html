@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Kluczy</title>
+    <style>
+        /* Styl tła i tekstu */
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            flex-direction: column;
+            text-align: center;
+            margin: 0;
+        }
+        
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #00C851;
+        }
+
+        /* Styl kontenera na wygenerowany klucz */
+        #keyContainer {
+            margin: 20px;
+            font-size: 1.5em;
+            color: #33B5E5;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background-color: #212121;
+            border: 1px solid #333;
+        }
+
+        /* Styl przycisku */
+        .button {
+            background-color: #007E33;
+            color: #FFFFFF;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background-color: #00C851;
+            transform: scale(1.05);
+        }
+
+        /* Styl linku do Discorda */
+        .link {
+            color: #7289DA;
+            text-decoration: none;
+            font-size: 1em;
+            margin-top: 30px;
+            display: inline-block;
+            padding: 10px 20px;
+            border: 2px solid #7289DA;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .link:hover {
+            background-color: #7289DA;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Generator Kluczy</h1>
+    <button class="button" onclick="generateKey()">GET KEY</button>
+
+    <div id="keyContainer">Kliknij przycisk, aby wygenerować klucz.</div>
+
+    <a class="link" href="https://discord.gg/B4GGPtfqAB" target="_blank">Dołącz do naszego Discorda</a>
+
+    <script>
+        function generateKey() {
+            // Tworzymy losowy klucz - 10 znaków z liter i cyfr
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let key = '';
+            for (let i = 0; i < 10; i++) {
+                key += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+
+            // Wyświetlamy klucz na stronie
+            document.getElementById('keyContainer').textContent = "Twój klucz: " + key;
+
+            // Zapisujemy klucz do LocalStorage
+            localStorage.setItem('savedKey', key);
+        }
+
+        // Funkcja do pobrania zapisanego klucza przy ponownym otwarciu strony
+        function loadSavedKey() {
+            const savedKey = localStorage.getItem('savedKey');
+            if (savedKey) {
+                document.getElementById('keyContainer').textContent = "Twój zapisany klucz: " + savedKey;
+            }
+        }
+
+        // Wczytujemy zapisany klucz przy załadowaniu strony
+        window.onload = loadSavedKey;
+    </script>
+
+</body>
+</html>
