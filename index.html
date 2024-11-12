@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator Kluczy</title>
     <style>
-        /* Styl tła i tekstu */
         body {
             background-color: #121212;
             color: #FFFFFF;
@@ -25,7 +24,6 @@
             color: #00C851;
         }
 
-        /* Styl kontenera na wygenerowany klucz */
         #keyContainer {
             margin: 20px;
             font-size: 1.5em;
@@ -36,7 +34,6 @@
             border: 1px solid #333;
         }
 
-        /* Styl przycisku */
         .button {
             background-color: #007E33;
             color: #FFFFFF;
@@ -54,7 +51,6 @@
             transform: scale(1.05);
         }
 
-        /* Styl linku do Discorda */
         .link {
             color: #7289DA;
             text-decoration: none;
@@ -76,29 +72,33 @@
 <body>
 
     <h1>Generator Kluczy</h1>
-    <button class="button" onclick="generateKey()">GET KEY</button>
+    <button class="button" onclick="getKey()">GET KEY</button>
 
-    <div id="keyContainer">Kliknij przycisk, aby wygenerować klucz.</div>
+    <div id="keyContainer">Kliknij przycisk, aby pobrać klucz.</div>
 
     <a class="link" href="https://discord.gg/B4GGPtfqAB" target="_blank">Dołącz do naszego Discorda</a>
 
     <script>
-        function generateKey() {
-            // Tworzymy losowy klucz - 10 znaków z liter i cyfr
-            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let key = '';
-            for (let i = 0; i < 10; i++) {
-                key += characters.charAt(Math.floor(Math.random() * characters.length));
+        const keyUrl = "https://nothingx555.github.io/MENU-HUB/";  // Zastąp tym URL, gdzie generowany jest klucz
+
+        async function getKey() {
+            try {
+                const response = await fetch(keyUrl);
+                if (response.ok) {
+                    const key = await response.text();
+                    document.getElementById('keyContainer').textContent = "Twój klucz: " + key.trim();
+
+                    // Zapisujemy klucz do LocalStorage
+                    localStorage.setItem('savedKey', key.trim());
+                } else {
+                    document.getElementById('keyContainer').textContent = "Błąd: Nie udało się pobrać klucza.";
+                }
+            } catch (error) {
+                console.error("Błąd podczas pobierania klucza:", error);
+                document.getElementById('keyContainer').textContent = "Błąd połączenia.";
             }
-
-            // Wyświetlamy klucz na stronie
-            document.getElementById('keyContainer').textContent = "Twój klucz: " + key;
-
-            // Zapisujemy klucz do LocalStorage
-            localStorage.setItem('savedKey', key);
         }
 
-        // Funkcja do pobrania zapisanego klucza przy ponownym otwarciu strony
         function loadSavedKey() {
             const savedKey = localStorage.getItem('savedKey');
             if (savedKey) {
@@ -106,7 +106,6 @@
             }
         }
 
-        // Wczytujemy zapisany klucz przy załadowaniu strony
         window.onload = loadSavedKey;
     </script>
 
