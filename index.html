@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Kluczy</title>
+    <title>get-key</title>
     <style>
         body {
             background-color: #121212;
@@ -17,96 +17,134 @@
             text-align: center;
             margin: 0;
         }
-        
-        h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
-            color: #00C851;
+
+        #countdown {
+            font-size: 4em;
+            color: #FFFFFF;
+            margin-top: 20px;
+            animation: blackEffect 1s infinite alternate;
+        }
+
+        @keyframes blackEffect {
+            0% {
+                color: #FFFFFF;
+                text-shadow: 2px 2px 5px #000000;
+                transform: scale(1);
+            }
+            50% {
+                color: #000000;
+                text-shadow: 2px 2px 10px #FFFFFF;
+                transform: scale(1.1);
+            }
+            100% {
+                color: #FFFFFF;
+                text-shadow: 2px 2px 5px #000000;
+                transform: scale(1);
+            }
         }
 
         #keyContainer {
-            margin: 20px;
+            margin-top: 20px;
             font-size: 1.5em;
-            color: #33B5E5;
             padding: 10px 20px;
             border-radius: 8px;
             background-color: #212121;
             border: 1px solid #333;
-        }
-
-        .button {
-            background-color: #007E33;
-            color: #FFFFFF;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2em;
+            display: none;  /* Initially hidden */
             cursor: pointer;
-            border-radius: 8px;
-            transition: background-color 0.3s, transform 0.3s;
-            margin-top: 10px;
+            color: #FFFFFF;
+            animation: fadeIn 2s forwards;
         }
 
-        .button:hover {
-            background-color: #00C851;
-            transform: scale(1.05);
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
-        .link {
-            color: #7289DA;
-            text-decoration: none;
-            font-size: 1em;
-            margin-top: 30px;
-            display: inline-block;
-            padding: 10px 20px;
-            border: 2px solid #7289DA;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        .link:hover {
-            background-color: #7289DA;
-            color: white;
+        /* Prevent right-click and disable text selection */
+        body {
+            user-select: none;
         }
     </style>
 </head>
 <body>
 
-    <h1>Generator Kluczy</h1>
-    <button class="button" onclick="getKey()">GET KEY</button>
-
-    <div id="keyContainer">Kliknij przycisk, aby pobrać klucz.</div>
-
-    <a class="link" href="https://discord.gg/B4GGPtfqAB" target="_blank">Dołącz do naszego Discorda</a>
+    <div id="countdown">25</div>
+    <div id="keyContainer"></div>
 
     <script>
-        const keyUrl = "https://nothingx555.github.io/KEY/";  // Zastąp tym URL, gdzie generowany jest klucz
+        const keyUrl = "https://raw.githubusercontent.com/NOTHINGx555/KEY/refs/heads/main/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key/key.txt";
 
-        async function getKey() {
+        let countdownTime = 25;
+        let countdownInterval;
+        let clickCount = 0;
+
+        function startCountdown() {
+            countdownInterval = setInterval(function () {
+                if (countdownTime > 0) {
+                    countdownTime--;
+                    document.getElementById('countdown').textContent = countdownTime;
+                } else {
+                    clearInterval(countdownInterval);
+                    fetchKey();
+                }
+            }, 1000);
+        }
+
+        async function fetchKey() {
             try {
                 const response = await fetch(keyUrl);
                 if (response.ok) {
                     const key = await response.text();
-                    document.getElementById('keyContainer').textContent = "Twój klucz: " + key.trim();
-
-                    // Zapisujemy klucz do LocalStorage
-                    localStorage.setItem('savedKey', key.trim());
+                    document.getElementById('keyContainer').textContent = key.trim();
+                    document.getElementById('keyContainer').style.display = 'block';
+                    document.getElementById('countdown').style.display = 'none';
                 } else {
                     document.getElementById('keyContainer').textContent = "Błąd: Nie udało się pobrać klucza.";
+                    document.getElementById('keyContainer').style.display = 'block';
                 }
             } catch (error) {
                 console.error("Błąd podczas pobierania klucza:", error);
                 document.getElementById('keyContainer').textContent = "Błąd połączenia.";
+                document.getElementById('keyContainer').style.display = 'block';
             }
         }
 
-        function loadSavedKey() {
-            const savedKey = localStorage.getItem('savedKey');
-            if (savedKey) {
-                document.getElementById('keyContainer').textContent = "Twój zapisany klucz: " + savedKey;
+        function handleClick() {
+            if (clickCount === 0) {
+                const key = document.getElementById('keyContainer').textContent.trim();
+                navigator.clipboard.writeText(key).then(function() {
+                    alert("Key is copied");
+                    document.getElementById('keyContainer').style.display = 'none';
+                    document.getElementById('countdown').style.display = 'block';
+                    setTimeout(function() {
+                        window.close();
+                    }, 1);
+                }).catch(function(err) {
+                    console.error("Failed to copy the key: ", err);
+                });
+                document.getElementById('keyContainer').classList.add('clicked');
+                clickCount = 1;
             }
         }
 
-        window.onload = loadSavedKey;
+        document.getElementById('keyContainer').addEventListener('click', handleClick);
+
+        window.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+        });
+
+        window.addEventListener('keydown', function(e) {
+            if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.shiftKey && e.keyCode === 74)) {
+                e.preventDefault();
+            }
+        });
+
+        window.onload = startCountdown;
     </script>
 
 </body>
